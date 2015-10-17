@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{FD5C16FA-733A-4183-B5C1-9ED6E92AB857}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WordProgress.Domain</RootNamespace>
+    <AssemblyName>WordProgress.Domain</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Aggregates\Project.cs" />
+    <Compile Include="Aggregates\ProjectProgress.cs" />
+    <Compile Include="Aggregates\WordCountUpdate.cs" />
+    <Compile Include="Aggregates\Writer.cs" />
+    <Compile Include="Commands\BaseCommand.cs" />
+    <Compile Include="Commands\CalculateProjectProgress.cs" />
+    <Compile Include="Commands\CreateProject.cs" />
+    <Compile Include="Commands\DeleteProject.cs" />
+    <Compile Include="Commands\DeleteWordCountUpdate.cs" />
+    <Compile Include="Commands\RegisterWriter.cs" />
+    <Compile Include="Commands\RetrieveProjectList.cs" />
+    <Compile Include="Commands\UpdateProject.cs" />
+    <Compile Include="Commands\UpdateWordCount.cs" />
+    <Compile Include="Commands\UpdateWriter.cs" />
+    <Compile Include="Events\ProjectCreated.cs" />
+    <Compile Include="Events\ProjectDeleted.cs" />
+    <Compile Include="Events\ProjectListRetrieved.cs" />
+    <Compile Include="Events\ProjectProgressCalculated.cs" />
+    <Compile Include="Events\ProjectUpdated.cs" />
+    <Compile Include="Events\RegisterWriter.cs" />
+    <Compile Include="Events\UpdatreWriterDetails.cs" />
+    <Compile Include="Events\WordCountUpdated.cs" />
+    <Compile Include="Events\WordCountUpdateDeleted.cs" />
+    <Compile Include="Events\BaseEvent.cs" />
+    <Compile Include="Exceptions\Exceptions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReadModels\ProjectReader.cs" />
+    <Compile Include="ReadModels\WriterReader.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DTOs\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WordProgress.Edument\WordProgress.Edument.csproj">
+      <Project>{3C6782DE-A15C-4510-821B-A7C3E363880E}</Project>
+      <Name>WordProgress.Edument</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
