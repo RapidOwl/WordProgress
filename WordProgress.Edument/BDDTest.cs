@@ -1,9 +1,9 @@
-﻿using System;
+﻿using NUnit.Framework;
+using System;
 using System.Collections;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
-using NUnit.Framework;
 
 namespace WordProgress.Edument
 {

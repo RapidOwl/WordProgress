@@ -1,6 +1,6 @@
-﻿namespace WordProgress.Domain.Commands
+﻿namespace WordProgress.Domain.Events
 {
-    public class RegisterWriter : BaseCommand
+    public class WriterRegistered : BaseEvent
     {
         public string UserName { get; set; }
         public string Name { get; set; }

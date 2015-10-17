@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordProgress.Edument", "Wor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordProgress.Tests", "WordProgress.Tests\WordProgress.Tests.csproj", "{869098DE-F303-44F8-B6C9-B36D9BE71869}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordProgress.ReadModels", "WordProgress.ReadModels\WordProgress.ReadModels.csproj", "{A80FEFA9-14B6-44EF-81CE-A5A9F875D80F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{869098DE-F303-44F8-B6C9-B36D9BE71869}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{869098DE-F303-44F8-B6C9-B36D9BE71869}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{869098DE-F303-44F8-B6C9-B36D9BE71869}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A80FEFA9-14B6-44EF-81CE-A5A9F875D80F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A80FEFA9-14B6-44EF-81CE-A5A9F875D80F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A80FEFA9-14B6-44EF-81CE-A5A9F875D80F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A80FEFA9-14B6-44EF-81CE-A5A9F875D80F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{869098DE-F303-44F8-B6C9-B36D9BE71869}</ProjectGuid>
+    <ProjectGuid>{A80FEFA9-14B6-44EF-81CE-A5A9F875D80F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WordProgress.Tests</RootNamespace>
-    <AssemblyName>WordProgress.Tests</AssemblyName>
+    <RootNamespace>WordProgress.ReadModels</RootNamespace>
+    <AssemblyName>WordProgress.ReadModels</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,11 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-    <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -45,21 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="WriterTests.cs" />
+    <Compile Include="ProjectReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\WordProgress.Domain\WordProgress.Domain.csproj">
-      <Project>{FD5C16FA-733A-4183-B5C1-9ED6E92AB857}</Project>
-      <Name>WordProgress.Domain</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WordProgress.Edument\WordProgress.Edument.csproj">
-      <Project>{3C6782DE-A15C-4510-821B-A7C3E363880E}</Project>
-      <Name>WordProgress.Edument</Name>
-    </ProjectReference>
+    <Compile Include="WriterReader.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
