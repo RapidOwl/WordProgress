@@ -50,7 +50,6 @@
     <Compile Include="Commands\DeleteProject.cs" />
     <Compile Include="Commands\DeleteWordCountUpdate.cs" />
     <Compile Include="Commands\RegisterWriter.cs" />
-    <Compile Include="Commands\RetrieveProjectList.cs" />
     <Compile Include="Commands\UpdateProject.cs" />
     <Compile Include="Commands\UpdateWordCount.cs" />
     <Compile Include="Commands\UpdateWriter.cs" />
@@ -58,7 +57,6 @@
     <Compile Include="DTOs\ProjectDto.cs" />
     <Compile Include="Events\ProjectCreated.cs" />
     <Compile Include="Events\ProjectDeleted.cs" />
-    <Compile Include="Events\ProjectListRetrieved.cs" />
     <Compile Include="Events\ProjectProgressCalculated.cs" />
     <Compile Include="Events\ProjectUpdated.cs" />
     <Compile Include="Events\WriterRegistered.cs" />

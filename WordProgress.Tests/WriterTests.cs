@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using WordProgress.Domain.Aggregates;
 using WordProgress.Domain.Commands;
-using WordProgress.Domain.DTOs;
 using WordProgress.Domain.Events;
 using WordProgress.Domain.Exceptions;
 using WordProgress.Edument;
 
 namespace WordProgress.Tests
 {
+    [TestFixture]
     public class WriterTests : BDDTest<Writer>
     {
         private string _userName;
@@ -17,8 +16,8 @@ namespace WordProgress.Tests
         private string _bio;
         private string _tooLongBio;
 
-        private IEnumerable<ProjectDto> _projectList;
-        private IEnumerable<ProjectDto> _projectListWithProject;
+        //private IEnumerable<ProjectDto> _projectList;
+        //private IEnumerable<ProjectDto> _projectListWithProject;
 
         private Guid _projectId;
         private string _projectName;
@@ -38,19 +37,19 @@ namespace WordProgress.Tests
             _bio = new string('*', 160);
             _tooLongBio = new string('*', 161);
 
-            _projectList = new List<ProjectDto>();
-            _projectListWithProject = new List<ProjectDto>
-            {
-                new ProjectDto
-                {
-                    Id = Guid.NewGuid(),
-                    Created = _created,
-                    Name = _projectName,
-                    StartDate = _startDate,
-                    TargetCompletionDate = _targetCompletionDate,
-                    TargetWordCount = _targetWordCount
-                }
-            };
+            //_projectList = new List<ProjectDto>();
+            //_projectListWithProject = new List<ProjectDto>
+            //{
+            //    new ProjectDto
+            //    {
+            //        Id = Guid.NewGuid(),
+            //        Created = _created,
+            //        Name = _projectName,
+            //        StartDate = _startDate,
+            //        TargetCompletionDate = _targetCompletionDate,
+            //        TargetWordCount = _targetWordCount
+            //    }
+            //};
 
             _projectId = Guid.NewGuid();
             _created = new DateTime(2015, 10, 15);
@@ -156,39 +155,6 @@ namespace WordProgress.Tests
         }
         #endregion
 
-        // TODO Get rid of anything to do with the project list being retrieved. It's a history of events. This isn't an event.
-        #region RetrieveProjectList
-
-        [Test]
-        public void CanRetrieveProjectList()
-        {
-            Test(
-                Given(new WriterRegistered
-                {
-                    UserName = _userName,
-                    Name = _name
-                }),
-                // TODO Should I be passing an ID into this command?
-                // Is this command originating in the aggregate itself?
-                // Should instantiating the aggregate not rehydrate it?
-                When(new RetrieveProjectList()),
-                Then(new ProjectListRetrieved
-                {
-                    Projects = _projectList
-                }));
-        }
-
-        [Test]
-        public void CanNotRetrieveProjectListWhenWriterNotRegistered()
-        {
-            Test(
-                Given(),
-                When(new RetrieveProjectList()),
-                ThenFailWith<WriterNotRegistered>());
-        }
-
-        #endregion
-
         #region CreateProject
 
         [Test]
@@ -199,12 +165,7 @@ namespace WordProgress.Tests
                 {
                     UserName = _userName,
                     Name = _name
-                },
-                new ProjectListRetrieved
-                {
-                    Projects = _projectList
-                }
-                ),
+                }),
                 When(new CreateProject
                 {
                     Name = _projectName,
@@ -239,25 +200,6 @@ namespace WordProgress.Tests
         }
 
         [Test]
-        public void CanNotCreateProjectWhenProjectListNotYetRetrieved()
-        {
-            Test(
-                Given(new WriterRegistered
-                {
-                    UserName = _userName,
-                    Name = _name
-                }),
-                When(new CreateProject
-                {
-                    Name = _projectName,
-                    StartDate = _startDate,
-                    TargetCompletionDate = _targetCompletionDate,
-                    TargetWordCount = _targetWordCount
-                }),
-                ThenFailWith<ProjectListNotYetRetrieved>());
-        }
-
-        [Test]
         public void CanNotCreateProjectWhenProjectNameAlreadyInUse()
         {
             Test(
@@ -265,10 +207,6 @@ namespace WordProgress.Tests
                 {
                     UserName = _userName,
                     Name = _name
-                },
-                new ProjectListRetrieved
-                {
-                    Projects = _projectListWithProject
                 },
                 new ProjectCreated
                 {
@@ -286,7 +224,7 @@ namespace WordProgress.Tests
                     TargetCompletionDate = _targetCompletionDate,
                     TargetWordCount = _targetWordCount
                 }),
-                ThenFailWith<ProjectNameAlreadyUsed>());
+                ThenFailWith<ProjectNameAlreadyUsedByThisWriter>());
         }
 
         #endregion
@@ -362,7 +300,7 @@ namespace WordProgress.Tests
                     TargetCompletionDate = _targetCompletionDate,
                     TargetWordCount = _targetWordCount
                 }),
-                ThenFailWith<ProjectDoesntExist>());
+                ThenFailWith<ProjectDoesntExistForThisWriter>());
         }
 
         [Test]
@@ -391,7 +329,7 @@ namespace WordProgress.Tests
                     TargetCompletionDate = _targetCompletionDate,
                     TargetWordCount = _targetWordCount
                 }),
-                ThenFailWith<ProjectDoesntExist>());
+                ThenFailWith<ProjectDoesntExistForThisWriter>());
         }
 
         [Test]
@@ -429,7 +367,7 @@ namespace WordProgress.Tests
                     TargetCompletionDate = _targetCompletionDate,
                     TargetWordCount = _targetWordCount
                 }),
-                ThenFailWith<ProjectNameAlreadyUsed>());
+                ThenFailWith<ProjectNameAlreadyUsedByThisWriter>());
         }
 
         #endregion
@@ -486,7 +424,7 @@ namespace WordProgress.Tests
                 {
                     Id = _projectId
                 }),
-                ThenFailWith<ProjectDoesntExist>());
+                ThenFailWith<ProjectDoesntExistForThisWriter>());
         }
 
         [Test]
@@ -511,7 +449,7 @@ namespace WordProgress.Tests
                 {
                     Id = _differentProjectId
                 }),
-                ThenFailWith<ProjectDoesntExist>());
+                ThenFailWith<ProjectDoesntExistForThisWriter>());
         }
 
         #endregion

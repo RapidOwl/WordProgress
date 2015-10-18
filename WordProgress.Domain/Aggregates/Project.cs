@@ -13,7 +13,8 @@ namespace WordProgress.Domain.Aggregates
         private DateTime _created;
         private DateTime _startDate;
         private DateTime _targetCompetionDate;
-        private DateTime _targetWordCount;
+        private uint _targetWordCount;
+        private uint _currentWordCount;
 
         private List<WordCountUpdate> _wordCountUpdates;
 

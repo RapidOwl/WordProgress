@@ -1,22 +1,59 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace WordProgress.Domain.Exceptions
 {
-    public class UserAlreadyRegistered : Exception { }
+    #region Writer Exceptions
 
-    public class UserNameTaken : Exception { }
+    public class UserAlreadyRegistered : Exception
+    {
+        public UserAlreadyRegistered() : base("This user has already been registered.") { }
+    }
 
-    public class BioTooLong : Exception { }
+    public class UserNameTaken : Exception
+    {
+        public UserNameTaken() : base("This user name has already been taken.") { }
+    }
 
-    public class WriterNotRegistered : Exception { }
+    public class BioTooLong : Exception
+    {
+        public BioTooLong(int maxBioLength) : base($"The bio you have provided must be less than {maxBioLength} characters in length.") { }
+    }
 
-    public class ProjectListNotYetRetrieved : Exception { }
+    public class WriterNotRegistered : Exception
+    {
+        public WriterNotRegistered () : base("You must register the writer before performing any other operations.") { }
+    }
 
-    public class ProjectNameAlreadyUsed : Exception { }
+    public class ProjectNameAlreadyUsedByThisWriter : Exception
+    {
+        public ProjectNameAlreadyUsedByThisWriter () : base("This project name is already in use.") { }
+    }
 
-    public class ProjectDoesntExist : Exception { }
-    
-    public class WordCountUpdateDoesntExist : Exception { }
+    public class ProjectDoesntExistForThisWriter : Exception
+    {
+        public ProjectDoesntExistForThisWriter () : base("The supplied ID does not resolve to any project owned by this writer.") { }
+    }
 
-    public class ProjectHasNoWordCountUpdates : Exception { }
+    #endregion
+
+    #region Project Exceptions
+
+    [Serializable]
+    public class NewWordCountLessThanCurrentWordCount : Exception
+    {
+        public NewWordCountLessThanCurrentWordCount() : base("The supplied new word count is less than the current word count.") { }
+    }
+
+    public class WordCountUpdateDoesntExistForThisProject : Exception
+    {
+        public WordCountUpdateDoesntExistForThisProject () : base("The supplied ID does not resolve to a word count update for this project.") { }
+    }
+
+    public class ProjectHasNoWordCountUpdates : Exception
+    {
+        public ProjectHasNoWordCountUpdates () : base("This project has no word count updates.") { }
+    }
+
+    #endregion
 }

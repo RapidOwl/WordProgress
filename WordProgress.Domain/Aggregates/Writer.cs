@@ -15,15 +15,12 @@ namespace WordProgress.Domain.Aggregates
 
         private List<Project> _projects;
 
-        // TODO Bio too long checks + exception.
-
         #region Checks
 
         private bool UserExists() => _registered && _created != null && _userName != string.Empty;
-        private bool ProjectsLoaded() => _projects != null;
-        private bool ValidProjectName(string newProjectName) => _projects.All(x => x.Name != newProjectName);
-        private bool ProjectExists(Guid projectId) => _projects.Any(x => x.Id == projectId);
-        private bool HasProjects() => _projects.Any();
+        private bool ValidProjectName(string newProjectName) => _projects != null && _projects.All(x => x.Name != newProjectName);
+        private bool ProjectExists(Guid projectId) => _projects != null && _projects.Any(x => x.Id == projectId);
+        private bool HasProjects() => _projects != null && _projects.Any();
 
         #endregion
 
