@@ -11,6 +11,9 @@ namespace WordProgress.Tests
     [TestFixture]
     public class WriterTests : BDDTest<Writer>
     {
+        private const int MaxBioLength = 160;
+
+        private Guid _userId;
         private string _userName;
         private string _name;
         private string _bio;
@@ -24,7 +27,7 @@ namespace WordProgress.Tests
         private DateTime _created;
         private DateTime _startDate;
         private DateTime _targetCompletionDate;
-        private int _targetWordCount;
+        private uint _targetWordCount;
 
         private Guid _differentProjectId;
         private string _differentProjectName;
@@ -32,10 +35,11 @@ namespace WordProgress.Tests
         [SetUp]
         public void SetUp()
         {
+            _userId = Guid.NewGuid();
             _userName = "new_user_name";
             _name = "Test Name";
-            _bio = new string('*', 160);
-            _tooLongBio = new string('*', 161);
+            _bio = new string('*', MaxBioLength);
+            _tooLongBio = new string('*', MaxBioLength + 1);
 
             //_projectList = new List<ProjectDto>();
             //_projectListWithProject = new List<ProjectDto>
@@ -65,25 +69,26 @@ namespace WordProgress.Tests
         #region RegisterWriter
 
         [Test]
-        public void CanCreateNewWriter()
+        public void CanRegisterNewWriter()
         {
             Test(
                 Given(),
                 When(new RegisterWriter
                 {
+                    Id = _userId,
                     UserName = _userName,
                     Name = _name
                 }),
                 Then(new WriterRegistered
                 {
-                    Id = Guid.NewGuid(),
+                    Id = _userId,
                     UserName = _userName,
                     Name = _name
                 }));
         }
 
         [Test]
-        public void CanNotCreateWriterAgain()
+        public void CanNotRegisterWriterAgain()
         {
             Test(
                 Given(new WriterRegistered
@@ -176,7 +181,6 @@ namespace WordProgress.Tests
                 Then(new ProjectCreated
                 {
                     Id = _projectId,
-                    Created = _created,
                     Name = _projectName,
                     StartDate = _startDate,
                     TargetCompletionDate = _targetCompletionDate,
@@ -211,7 +215,6 @@ namespace WordProgress.Tests
                 new ProjectCreated
                 {
                     Id = _projectId,
-                    Created = _created,
                     Name = _projectName,
                     StartDate = _startDate,
                     TargetCompletionDate = _targetCompletionDate,
@@ -243,7 +246,6 @@ namespace WordProgress.Tests
                 new ProjectCreated
                 {
                     Id = _projectId,
-                    Created = _created,
                     Name = _projectName,
                     StartDate = _startDate,
                     TargetCompletionDate = _targetCompletionDate,
@@ -315,7 +317,6 @@ namespace WordProgress.Tests
                 new ProjectCreated
                 {
                     Id = _projectId,
-                    Created = _created,
                     Name = _projectName,
                     StartDate = _startDate,
                     TargetCompletionDate = _targetCompletionDate,
@@ -344,7 +345,6 @@ namespace WordProgress.Tests
                 new ProjectCreated
                 {
                     Id = _projectId,
-                    Created = _created,
                     Name = _projectName,
                     StartDate = _startDate,
                     TargetCompletionDate = _targetCompletionDate,
@@ -353,7 +353,6 @@ namespace WordProgress.Tests
                 new ProjectCreated
                 {
                     Id = _differentProjectId,
-                    Created = _created,
                     Name = _differentProjectName,
                     StartDate = _startDate,
                     TargetCompletionDate = _targetCompletionDate,
@@ -386,7 +385,6 @@ namespace WordProgress.Tests
                 new ProjectCreated
                 {
                     Id = _projectId,
-                    Created = _created,
                     Name = _projectName,
                     StartDate = _startDate,
                     TargetCompletionDate = _targetCompletionDate,
@@ -439,7 +437,6 @@ namespace WordProgress.Tests
                 new ProjectCreated
                 {
                     Id = _projectId,
-                    Created = _created,
                     Name = _projectName,
                     StartDate = _startDate,
                     TargetCompletionDate = _targetCompletionDate,

@@ -1,6 +1,9 @@
-﻿namespace WordProgress.Domain.Events
+﻿using System;
+
+namespace WordProgress.Domain.Events
 {
     public class ProjectDeleted : BaseEvent
     {
+        public Guid ProjectId { get; set; }
     }
 }

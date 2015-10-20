@@ -1,11 +1,13 @@
-﻿using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
+using NUnit.Framework;
+using WordProgress.Domain.Aggregates;
+using WordProgress.Edument;
 
-namespace WordProgress.Edument
+namespace WordProgress.Tests
 {
     /// <summary>
     /// Provides infrastructure for a set of tests on a given aggregate.

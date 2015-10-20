@@ -44,8 +44,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Aggregate.cs" />
-    <Compile Include="BDDTest.cs" />
     <Compile Include="IApplyEvent.cs" />
     <Compile Include="IHandleCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

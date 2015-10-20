@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections;
+using WordProgress.Edument;
 
-namespace WordProgress.Edument
+namespace WordProgress.Domain.Aggregates
 {
     /// <summary>
     /// Aggregate base class, which factors out some common infrastructure that
@@ -18,6 +19,13 @@ namespace WordProgress.Edument
         /// The unique ID of the aggregate.
         /// </summary>
         public Guid Id { get; internal set; }
+
+        #region Checks
+
+        public bool IdPopulated() => Id != Guid.Empty;
+        public bool IdMatches(Guid id) => id == Id;
+
+        #endregion
 
         /// <summary>
         /// Enuerates the supplied events and applies them in order to the aggregate.

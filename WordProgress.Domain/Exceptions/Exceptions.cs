@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace WordProgress.Domain.Exceptions
 {
@@ -39,7 +38,16 @@ namespace WordProgress.Domain.Exceptions
 
     #region Project Exceptions
 
-    [Serializable]
+    public class ProjectAlreadyCreated : Exception
+    {
+        public ProjectAlreadyCreated() : base("This project has already been created.") { }
+    }
+
+    public class ProjectNotYetCreated : Exception
+    {
+        public ProjectNotYetCreated() : base("This project has not been created.") { }
+    }
+
     public class NewWordCountLessThanCurrentWordCount : Exception
     {
         public NewWordCountLessThanCurrentWordCount() : base("The supplied new word count is less than the current word count.") { }
