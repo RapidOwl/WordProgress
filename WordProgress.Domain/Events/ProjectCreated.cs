@@ -4,6 +4,7 @@ namespace WordProgress.Domain.Events
 {
     public class ProjectCreated : BaseEvent
     {
+        public Guid ProjectId { get; set; }
         public string Name { get; set; }
 
         public DateTime StartDate { get; set; }

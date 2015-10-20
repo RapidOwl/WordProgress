@@ -2,7 +2,7 @@
 
 namespace WordProgress.Domain.Events
 {
-    public class ProjectDeleted : BaseEvent
+    public class ProjectDeletedForWriter : BaseEvent
     {
         public Guid ProjectId { get; set; }
     }

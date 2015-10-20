@@ -4,6 +4,8 @@ namespace WordProgress.Domain.Commands
 {
     public class CreateProject : BaseCommand
     {
+        public Guid ProjectId { get; set; }
+
         public string Name { get; set; }
 
         public DateTime StartDate { get; set; }

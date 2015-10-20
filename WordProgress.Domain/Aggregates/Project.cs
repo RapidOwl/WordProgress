@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WordProgress.Domain.Commands;
 using WordProgress.Domain.Events;
+using WordProgress.Domain.Exceptions;
 using WordProgress.Edument;
 
 namespace WordProgress.Domain.Aggregates
@@ -36,47 +37,126 @@ namespace WordProgress.Domain.Aggregates
         #region Checks
 
         private bool WordCountUpdateExists(Guid wordCountUpdateId) => _wordCountUpdates.Any(x => x.Id == wordCountUpdateId);
-        
+        private bool ValidNewWordCount(uint newWordCount) => newWordCount > _currentWordCount;
+
         #endregion
+
+        #region Handling commands
 
         public IEnumerable Handle(CreateProject c)
         {
-            throw new NotImplementedException();
+            if (IdPopulated())
+            {
+                throw new ProjectAlreadyCreated();
+            }
+
+            yield return new ProjectCreated
+            {
+                Id = c.Id,
+                ProjectId = c.ProjectId,
+                Name = c.Name,
+                StartDate = c.StartDate,
+                TargetCompletionDate = c.TargetCompletionDate,
+                TargetWordCount = c.TargetWordCount
+            };
         }
 
         public IEnumerable Handle(UpdateProject c)
         {
-            throw new NotImplementedException();
+            if (!IdPopulated())
+            {
+                throw new ProjectNotYetCreated();
+            }
+
+            yield return new ProjectUpdated
+            {
+                Id = c.Id,
+                Name = c.Name,
+                StartDate = c.StartDate,
+                TargetCompletionDate = c.TargetCompletionDate,
+                TargetWordCount = c.TargetWordCount
+            };
         }
 
         public IEnumerable Handle(UpdateWordCount c)
         {
-            throw new NotImplementedException();
+            if (!IdPopulated())
+            {
+                throw new ProjectNotYetCreated();
+            }
+
+            if (!ValidNewWordCount(c.NewTotalWordCount))
+            {
+                throw new NewWordCountLessThanCurrentWordCount();
+            }
+
+            yield return new WordCountUpdated
+            {
+                Id = c.Id,
+                WordCountUpdateId = c.WordCountUpdateId,
+                NewTotalWordCount = c.NewTotalWordCount
+            };
         }
 
         public IEnumerable Handle(DeleteWordCountUpdate c)
         {
-            throw new NotImplementedException();
+            if (!IdPopulated())
+            {
+                throw new ProjectNotYetCreated();
+            }
+
+            if (!WordCountUpdateExists(c.WordCountUpdateId))
+            {
+                throw new WordCountUpdateDoesntExistForThisProject();
+            }
+
+            yield return new WordCountUpdateDeleted
+            {
+                Id = c.Id,
+                WordCountUpdateId = c.WordCountUpdateId
+            };
         }
+
+        #endregion
+
+        #region Applying events
 
         public void Apply(ProjectCreated e)
         {
-            throw new NotImplementedException();
+            Id = e.ProjectId;
+            _created = DateTime.Now;
+            _name = e.Name;
+            _startDate = e.StartDate;
+            _targetCompletionDate = e.TargetCompletionDate;
+            _targetWordCount = e.TargetWordCount;
+
+            _wordCountUpdates = new List<WordCountUpdate>();
         }
 
         public void Apply(ProjectUpdated e)
         {
-            throw new NotImplementedException();
+            _name = e.Name;
+            _startDate = e.StartDate;
+            _targetCompletionDate = e.TargetCompletionDate;
+            _targetWordCount = e.TargetWordCount;
         }
 
         public void Apply(WordCountUpdated e)
         {
-            throw new NotImplementedException();
+            _wordCountUpdates.Add(new WordCountUpdate
+            {
+                Id = e.WordCountUpdateId,
+                WordsAdded = e.NewTotalWordCount - _currentWordCount
+            });
+
+            _currentWordCount = e.NewTotalWordCount;
         }
 
         public void Apply(WordCountUpdateDeleted e)
         {
-            throw new NotImplementedException();
+            _wordCountUpdates.RemoveAll(x => x.Id == e.WordCountUpdateId);
         }
+
+        #endregion
     }
 }

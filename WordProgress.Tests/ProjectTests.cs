@@ -12,6 +12,7 @@ namespace WordProgress.Tests
     {
         private Guid _commandId;
         private Guid _wordCountUpdateId;
+        private Guid _projectId;
         private string _newProjectName;
         private DateTime _newProjectStartDate;
         private uint _newProjectTargetWordCount;
@@ -22,6 +23,7 @@ namespace WordProgress.Tests
         {
             _commandId = Guid.NewGuid();
             _wordCountUpdateId = Guid.NewGuid();
+            _projectId = Guid.NewGuid();
             _newProjectName = "New Project";
             _newProjectStartDate = DateTime.Now;
             _newProjectTargetCompletionDate = DateTime.Now.AddYears(1);
@@ -37,6 +39,7 @@ namespace WordProgress.Tests
                 When(new CreateProject
                 {
                     Id = _commandId,
+                    ProjectId = _projectId,
                     Name = _newProjectName,
                     StartDate = _newProjectStartDate,
                     TargetCompletionDate = _newProjectTargetCompletionDate,
@@ -45,6 +48,7 @@ namespace WordProgress.Tests
                 Then(new ProjectCreated
                 {
                     Id = _commandId,
+                    ProjectId = _projectId,
                     Name = _newProjectName,
                     StartDate = _newProjectStartDate,
                     TargetCompletionDate = _newProjectTargetCompletionDate,
@@ -59,6 +63,7 @@ namespace WordProgress.Tests
                 Given(new ProjectCreated
                 {
                     Id = _commandId,
+                    ProjectId = _projectId,
                     Name = _newProjectName,
                     StartDate = _newProjectStartDate,
                     TargetCompletionDate = _newProjectTargetCompletionDate,
@@ -67,6 +72,7 @@ namespace WordProgress.Tests
                 When(new CreateProject
                 {
                     Id = _commandId,
+                    ProjectId = _projectId,
                     Name = _newProjectName,
                     StartDate = _newProjectStartDate,
                     TargetCompletionDate = _newProjectTargetCompletionDate,
@@ -79,12 +85,13 @@ namespace WordProgress.Tests
         #region UpdateProject
 
         [Test]
-        public void NewBDDTest()
+        public void CanUpdateProject()
         {
             Test(
                 Given(new ProjectCreated
                 {
                     Id = _commandId,
+                    ProjectId = _projectId,
                     Name = _newProjectName,
                     StartDate = _newProjectStartDate,
                     TargetCompletionDate = _newProjectTargetCompletionDate,
@@ -109,7 +116,7 @@ namespace WordProgress.Tests
         }
 
         [Test]
-        public void NewBDDExceptionTest()
+        public void CanNotUpdateProjectWhenProjectNotYetCreated()
         {
             Test(
                 Given(),
@@ -135,6 +142,7 @@ namespace WordProgress.Tests
                 Given(new ProjectCreated
                 {
                     Id = _commandId,
+                    ProjectId = _projectId,
                     Name = _newProjectName,
                     StartDate = _newProjectStartDate,
                     TargetCompletionDate = _newProjectTargetCompletionDate,
@@ -142,12 +150,15 @@ namespace WordProgress.Tests
                 }),
                 When(new UpdateWordCount
                 {
+                    Id = _commandId,
+                    WordCountUpdateId = _wordCountUpdateId,
                     NewTotalWordCount = 56000
                 }),
                 Then(new WordCountUpdated
                 {
-                    NewTotalWordCount = 76000,
-                    WordsAdded = 20000
+                    Id = _commandId,
+                    WordCountUpdateId = _wordCountUpdateId,
+                    NewTotalWordCount = 56000
                 }));
         }
 
@@ -158,6 +169,7 @@ namespace WordProgress.Tests
                 Given(),
                 When(new UpdateWordCount
                 {
+                    Id = _commandId,
                     NewTotalWordCount = 56000
                 }),
                 ThenFailWith<ProjectNotYetCreated>());
@@ -170,6 +182,7 @@ namespace WordProgress.Tests
                 Given(new ProjectCreated
                 {
                     Id = _commandId,
+                    ProjectId = _projectId,
                     Name = _newProjectName,
                     StartDate = _newProjectStartDate,
                     TargetCompletionDate = _newProjectTargetCompletionDate,
@@ -177,11 +190,12 @@ namespace WordProgress.Tests
                 },
                 new WordCountUpdated
                 {
-                    NewTotalWordCount = 76000,
-                    WordsAdded = 20000
+                    Id = _commandId,
+                    NewTotalWordCount = 76000
                 }),
                 When(new UpdateWordCount
                 {
+                    Id = _commandId,
                     NewTotalWordCount = 56000
                 }),
                 ThenFailWith<NewWordCountLessThanCurrentWordCount>());
@@ -198,6 +212,7 @@ namespace WordProgress.Tests
                 Given(new ProjectCreated
                 {
                     Id = _commandId,
+                    ProjectId = _projectId,
                     Name = _newProjectName,
                     StartDate = _newProjectStartDate,
                     TargetCompletionDate = _newProjectTargetCompletionDate,
@@ -205,15 +220,20 @@ namespace WordProgress.Tests
                 },
                 new WordCountUpdated
                 {
-                    Id = _wordCountUpdateId,
-                    NewTotalWordCount = 76000,
-                    WordsAdded = 20000
+                    Id = _commandId,
+                    WordCountUpdateId = _wordCountUpdateId,
+                    NewTotalWordCount = 76000
                 }),
                 When(new DeleteWordCountUpdate
                 {
-                    Id = _wordCountUpdateId
+                    Id = _commandId,
+                    WordCountUpdateId = _wordCountUpdateId
                 }),
-                Then(new WordCountUpdateDeleted()));
+                Then(new WordCountUpdateDeleted
+                {
+                    Id = _commandId,
+                    WordCountUpdateId = _wordCountUpdateId
+                }));
         }
 
         [Test]
@@ -223,9 +243,31 @@ namespace WordProgress.Tests
                 Given(),
                 When(new DeleteWordCountUpdate
                 {
-                    Id = _wordCountUpdateId
+                    Id = _commandId,
+                    WordCountUpdateId = _wordCountUpdateId
                 }),
                 ThenFailWith<ProjectNotYetCreated>());
+        }
+
+        [Test]
+        public void CanNotDeleteWordCountUpdateWhenThereNoWordCountUpdatesExist()
+        {
+            Test(
+                Given(new ProjectCreated
+                {
+                    Id = _commandId,
+                    ProjectId = _projectId,
+                    Name = _newProjectName,
+                    StartDate = _newProjectStartDate,
+                    TargetCompletionDate = _newProjectTargetCompletionDate,
+                    TargetWordCount = _newProjectTargetWordCount,
+                }),
+                When(new DeleteWordCountUpdate
+                {
+                    Id = _commandId,
+                    WordCountUpdateId = _wordCountUpdateId
+                }),
+                ThenFailWith<WordCountUpdateDoesntExistForThisProject>());
         }
 
         [Test]
@@ -235,6 +277,7 @@ namespace WordProgress.Tests
                 Given(new ProjectCreated
                 {
                     Id = _commandId,
+                    ProjectId = _projectId,
                     Name = _newProjectName,
                     StartDate = _newProjectStartDate,
                     TargetCompletionDate = _newProjectTargetCompletionDate,
@@ -242,7 +285,8 @@ namespace WordProgress.Tests
                 }),
                 When(new DeleteWordCountUpdate
                 {
-                    Id = _wordCountUpdateId
+                    Id = _commandId,
+                    WordCountUpdateId = _wordCountUpdateId
                 }),
                 ThenFailWith<WordCountUpdateDoesntExistForThisProject>());
         }

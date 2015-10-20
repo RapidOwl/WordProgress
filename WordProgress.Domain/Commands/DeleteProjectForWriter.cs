@@ -2,7 +2,7 @@
 
 namespace WordProgress.Domain.Commands
 {
-    public class DeleteProject : BaseCommand
+    public class DeleteProjectForWriter : BaseCommand
     {
          public Guid ProjectId { get; set; }
     }

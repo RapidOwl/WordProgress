@@ -2,8 +2,9 @@
 
 namespace WordProgress.Domain.Events
 {
-    public class ProjectUpdated : BaseEvent
+    public class ProjectUpdatedForWriter : BaseEvent
     {
+        public Guid ProjectId { get; set; }
         public string Name { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime TargetCompletionDate { get; set; }

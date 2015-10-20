@@ -4,13 +4,14 @@ using WordProgress.Domain.Aggregates;
 using WordProgress.Domain.Commands;
 using WordProgress.Domain.Events;
 using WordProgress.Domain.Exceptions;
-using WordProgress.Edument;
 
 namespace WordProgress.Tests
 {
     [TestFixture]
     public class WriterTests : BDDTest<Writer>
     {
+        private Guid _commandId;
+
         private const int MaxBioLength = 160;
 
         private Guid _userId;
@@ -19,44 +20,27 @@ namespace WordProgress.Tests
         private string _bio;
         private string _tooLongBio;
 
-        //private IEnumerable<ProjectDto> _projectList;
-        //private IEnumerable<ProjectDto> _projectListWithProject;
-
         private Guid _projectId;
         private string _projectName;
-        private DateTime _created;
         private DateTime _startDate;
         private DateTime _targetCompletionDate;
         private uint _targetWordCount;
 
         private Guid _differentProjectId;
         private string _differentProjectName;
-
+        
         [SetUp]
         public void SetUp()
         {
+            _commandId = Guid.NewGuid();
+
             _userId = Guid.NewGuid();
             _userName = "new_user_name";
             _name = "Test Name";
             _bio = new string('*', MaxBioLength);
             _tooLongBio = new string('*', MaxBioLength + 1);
 
-            //_projectList = new List<ProjectDto>();
-            //_projectListWithProject = new List<ProjectDto>
-            //{
-            //    new ProjectDto
-            //    {
-            //        Id = Guid.NewGuid(),
-            //        Created = _created,
-            //        Name = _projectName,
-            //        StartDate = _startDate,
-            //        TargetCompletionDate = _targetCompletionDate,
-            //        TargetWordCount = _targetWordCount
-            //    }
-            //};
-
             _projectId = Guid.NewGuid();
-            _created = new DateTime(2015, 10, 15);
             _projectName = "New Project Name";
             _startDate = new DateTime(2015, 10, 16);
             _targetCompletionDate = new DateTime(2015, 12, 31);
@@ -75,13 +59,13 @@ namespace WordProgress.Tests
                 Given(),
                 When(new RegisterWriter
                 {
-                    Id = _userId,
+                    Id = _commandId,
                     UserName = _userName,
                     Name = _name
                 }),
                 Then(new WriterRegistered
                 {
-                    Id = _userId,
+                    Id = _commandId,
                     UserName = _userName,
                     Name = _name
                 }));
@@ -93,11 +77,13 @@ namespace WordProgress.Tests
             Test(
                 Given(new WriterRegistered
                 {
+                    Id = _commandId,
                     UserName = _userName,
                     Name = _name
                 }),
                 When(new RegisterWriter
                 {
+                    Id = _commandId,
                     UserName = _userName,
                     Name = _name
                 }),
@@ -114,16 +100,19 @@ namespace WordProgress.Tests
             Test(
                 Given(new WriterRegistered
                 {
+                    Id = _commandId,
                     UserName = _userName,
                     Name = _name
                 }),
                 When(new UpdateWriter
                 {
+                    Id = _commandId,
                     Name = _name,
                     Bio = _bio
                 }),
                 Then(new WriterUpdated
                 {
+                    Id = _commandId,
                     Name = _name,
                     Bio = _bio
                 }));
@@ -136,6 +125,7 @@ namespace WordProgress.Tests
                 Given(),
                 When(new UpdateWriter
                 {
+                    Id = _commandId,
                     Name = _name,
                     Bio = _bio
                 }),
@@ -148,11 +138,13 @@ namespace WordProgress.Tests
             Test(
                 Given(new WriterRegistered
                 {
+                    Id = _commandId,
                     UserName = _userName,
                     Name = _name
                 }),
                 When(new UpdateWriter
                 {
+                    Id = _commandId,
                     Name = _name,
                     Bio = _tooLongBio
                 }),
@@ -160,27 +152,31 @@ namespace WordProgress.Tests
         }
         #endregion
 
-        #region CreateProject
+        #region CreateProjectForWriter
 
         [Test]
-        public void CanCreateProject()
+        public void CanCreateProjectForWriter()
         {
             Test(
                 Given(new WriterRegistered
                 {
+                    Id = _commandId,
                     UserName = _userName,
                     Name = _name
                 }),
-                When(new CreateProject
+                When(new CreateProjectForWriter
                 {
+                    Id = _commandId,
+                    ProjectId = _projectId,
                     Name = _projectName,
                     StartDate = _startDate,
                     TargetCompletionDate = _targetCompletionDate,
                     TargetWordCount = _targetWordCount
                 }),
-                Then(new ProjectCreated
+                Then(new ProjectCreatedForWriter
                 {
-                    Id = _projectId,
+                    Id = _commandId,
+                    ProjectId = _projectId,
                     Name = _projectName,
                     StartDate = _startDate,
                     TargetCompletionDate = _targetCompletionDate,
@@ -189,12 +185,14 @@ namespace WordProgress.Tests
         }
 
         [Test]
-        public void CanNotCreateProjectWhenWriterNotRegistered()
+        public void CanNotCreateProjectForWriterWhenWriterNotRegistered()
         {
             Test(
                 Given(),
-                When(new CreateProject
+                When(new CreateProjectForWriter
                 {
+                    Id = _commandId,
+                    ProjectId = _projectId,
                     Name = _projectName,
                     StartDate = _startDate,
                     TargetCompletionDate = _targetCompletionDate,
@@ -204,24 +202,28 @@ namespace WordProgress.Tests
         }
 
         [Test]
-        public void CanNotCreateProjectWhenProjectNameAlreadyInUse()
+        public void CanNotCreateProjectForWriterWhenProjectNameAlreadyInUse()
         {
             Test(
                 Given(new WriterRegistered
                 {
+                    Id = _commandId,
                     UserName = _userName,
                     Name = _name
                 },
-                new ProjectCreated
+                new ProjectCreatedForWriter
                 {
-                    Id = _projectId,
+                    Id = _commandId,
+                    ProjectId = _projectId,
                     Name = _projectName,
                     StartDate = _startDate,
                     TargetCompletionDate = _targetCompletionDate,
                     TargetWordCount = _targetWordCount
                 }),
-                When(new CreateProject
+                When(new CreateProjectForWriter
                 {
+                    Id = _commandId,
+                    ProjectId = _projectId,
                     Name = _projectName,
                     StartDate = _startDate,
                     TargetCompletionDate = _targetCompletionDate,
@@ -232,36 +234,40 @@ namespace WordProgress.Tests
 
         #endregion
 
-        #region UpdateProject
+        #region UpdateProjectForWriter
 
         [Test]
-        public void CanUpdateProject()
+        public void CanUpdateProjectForWriter()
         {
             Test(
                 Given(new WriterRegistered
                 {
+                    Id = _commandId,
                     UserName = _userName,
                     Name = _name
                 },
-                new ProjectCreated
+                new ProjectCreatedForWriter
                 {
-                    Id = _projectId,
+                    Id = _commandId,
+                    ProjectId = _projectId,
                     Name = _projectName,
                     StartDate = _startDate,
                     TargetCompletionDate = _targetCompletionDate,
                     TargetWordCount = _targetWordCount
                 }),
-                When(new UpdateProject
+                When(new UpdateProjectForWriter
                 {
-                    Id = _projectId,
+                    Id = _commandId,
+                    ProjectId = _projectId,
                     Name = _differentProjectName,
                     StartDate = _startDate,
                     TargetCompletionDate = _targetCompletionDate,
                     TargetWordCount = _targetWordCount
                 }),
-                Then(new ProjectUpdated
+                Then(new ProjectUpdatedForWriter
                 {
-                    Id = _projectId,
+                    Id = _commandId,
+                    ProjectId = _projectId,
                     Name = _differentProjectName,
                     StartDate = _startDate,
                     TargetCompletionDate = _targetCompletionDate,
@@ -270,13 +276,14 @@ namespace WordProgress.Tests
         }
 
         [Test]
-        public void CanNotUpdateProjectWhenWriterNotRegistered()
+        public void CanNotUpdateProjectForWriterWhenWriterNotRegistered()
         {
             Test(
                 Given(),
-                When(new UpdateProject
+                When(new UpdateProjectForWriter
                 {
-                    Id = _projectId,
+                    Id = _commandId,
+                    ProjectId = _projectId,
                     Name = _differentProjectName,
                     StartDate = _startDate,
                     TargetCompletionDate = _targetCompletionDate,
@@ -286,17 +293,19 @@ namespace WordProgress.Tests
         }
 
         [Test]
-        public void CanNotUpdateProjectWhenNoProjectsCreated()
+        public void CanNotUpdateProjectForWriterWhenNoProjectsCreated()
         {
             Test(
                 Given(new WriterRegistered
                 {
+                    Id = _commandId,
                     UserName = _userName,
                     Name = _name
                 }),
-                When(new UpdateProject
+                When(new UpdateProjectForWriter
                 {
-                    Id = _projectId,
+                    Id = _commandId,
+                    ProjectId = _projectId,
                     Name = _differentProjectName,
                     StartDate = _startDate,
                     TargetCompletionDate = _targetCompletionDate,
@@ -306,25 +315,28 @@ namespace WordProgress.Tests
         }
 
         [Test]
-        public void CanNotUpdateProjectWhenProjectDoesntExist()
+        public void CanNotUpdateProjectForWriterWhenProjectDoesntExist()
         {
             Test(
                 Given(new WriterRegistered
                 {
+                    Id = _commandId,
                     UserName = _userName,
                     Name = _name
                 },
-                new ProjectCreated
+                new ProjectCreatedForWriter
                 {
-                    Id = _projectId,
+                    Id = _commandId,
+                    ProjectId = _projectId,
                     Name = _projectName,
                     StartDate = _startDate,
                     TargetCompletionDate = _targetCompletionDate,
                     TargetWordCount = _targetWordCount
                 }),
-                When(new UpdateProject
+                When(new UpdateProjectForWriter
                 {
-                    Id = _differentProjectId,
+                    Id = _commandId,
+                    ProjectId = _differentProjectId,
                     Name = _differentProjectName,
                     StartDate = _startDate,
                     TargetCompletionDate = _targetCompletionDate,
@@ -334,33 +346,37 @@ namespace WordProgress.Tests
         }
 
         [Test]
-        public void CanNotUpdateProjectWhenNewProjectNameInUseByAnotherProject()
+        public void CanNotUpdateProjectForWriterWhenNewProjectNameInUseByAnotherProject()
         {
             Test(
                 Given(new WriterRegistered
                 {
+                    Id = _commandId,
                     UserName = _userName,
                     Name = _name
                 },
-                new ProjectCreated
+                new ProjectCreatedForWriter
                 {
-                    Id = _projectId,
+                    Id = _commandId,
+                    ProjectId = _projectId,
                     Name = _projectName,
                     StartDate = _startDate,
                     TargetCompletionDate = _targetCompletionDate,
                     TargetWordCount = _targetWordCount
                 },
-                new ProjectCreated
+                new ProjectCreatedForWriter
                 {
-                    Id = _differentProjectId,
+                    Id = _commandId,
+                    ProjectId = _differentProjectId,
                     Name = _differentProjectName,
                     StartDate = _startDate,
                     TargetCompletionDate = _targetCompletionDate,
                     TargetWordCount = _targetWordCount
                 }),
-                When(new UpdateProject
+                When(new UpdateProjectForWriter
                 {
-                    Id = _differentProjectId,
+                    Id = _commandId,
+                    ProjectId = _differentProjectId,
                     Name = _projectName,
                     StartDate = _startDate,
                     TargetCompletionDate = _targetCompletionDate,
@@ -371,80 +387,93 @@ namespace WordProgress.Tests
 
         #endregion
 
-        #region DeleteProject
+        #region DeleteProjectForWriter
 
         [Test]
-        public void CanDeleteProject()
+        public void CanDeleteProjectForWriter()
         {
             Test(
                 Given(new WriterRegistered
                 {
+                    Id = _commandId,
                     UserName = _userName,
                     Name = _name
                 },
-                new ProjectCreated
+                new ProjectCreatedForWriter
                 {
-                    Id = _projectId,
+                    Id = _commandId,
+                    ProjectId = _projectId,
                     Name = _projectName,
                     StartDate = _startDate,
                     TargetCompletionDate = _targetCompletionDate,
                     TargetWordCount = _targetWordCount
                 }),
-                When(new DeleteProject
+                When(new DeleteProjectForWriter
                 {
-                    Id = _projectId
+                    Id = _commandId,
+                    ProjectId = _projectId
                 }),
-                Then(new ProjectDeleted()));
+                Then(new ProjectDeletedForWriter
+                {
+                    Id = _commandId,
+                    ProjectId = _projectId
+                }));
         }
 
         [Test]
-        public void CanNotDeleteProjectWhenWriterNotRegistered()
+        public void CanNotDeleteProjectForWriterWhenWriterNotRegistered()
         {
             Test(
                 Given(),
-                When(new DeleteProject
+                When(new DeleteProjectForWriter
                 {
-                    Id = _projectId
+                    Id = _commandId,
+                    ProjectId = _projectId
                 }),
                 ThenFailWith<WriterNotRegistered>());
         }
 
         [Test]
-        public void CanNotDeleteProjectWhenNoProjectsExist()
+        public void CanNotDeleteProjectForWriterWhenNoProjectsExist()
         {
             Test(
                 Given(new WriterRegistered
                 {
+                    Id = _commandId,
                     UserName = _userName,
                     Name = _name
                 }),
-                When(new DeleteProject
+                When(new DeleteProjectForWriter
                 {
-                    Id = _projectId
+                    Id = _commandId,
+                    ProjectId = _projectId
                 }),
                 ThenFailWith<ProjectDoesntExistForThisWriter>());
         }
 
         [Test]
-        public void CanNotDeleteProjectWhenProjectDoesntExist()
+        public void CanNotDeleteProjectForWriterWhenProjectDoesntExist()
         {
             Test(
                 Given(new WriterRegistered
                 {
+                    Id = _commandId,
                     UserName = _userName,
                     Name = _name
                 },
-                new ProjectCreated
+                new ProjectCreatedForWriter
                 {
-                    Id = _projectId,
+                    Id = _commandId,
+                    ProjectId = _projectId,
                     Name = _projectName,
                     StartDate = _startDate,
                     TargetCompletionDate = _targetCompletionDate,
                     TargetWordCount = _targetWordCount
                 }),
-                When(new DeleteProject
+                When(new DeleteProjectForWriter
                 {
-                    Id = _differentProjectId
+                    Id = _commandId,
+                    ProjectId = _differentProjectId
                 }),
                 ThenFailWith<ProjectDoesntExistForThisWriter>());
         }

@@ -12,14 +12,14 @@ namespace WordProgress.Domain.Aggregates
     public class Writer : Aggregate,
         IHandleCommand<RegisterWriter>,
         IHandleCommand<UpdateWriter>,
-        IHandleCommand<CreateProject>,
-        IHandleCommand<UpdateProject>,
-        IHandleCommand<DeleteProject>,
+        IHandleCommand<CreateProjectForWriter>,
+        IHandleCommand<UpdateProjectForWriter>,
+        IHandleCommand<DeleteProjectForWriter>,
         IApplyEvent<WriterRegistered>,
         IApplyEvent<WriterUpdated>,
-        IApplyEvent<ProjectCreated>,
-        IApplyEvent<ProjectUpdated>,
-        IApplyEvent<ProjectDeleted>
+        IApplyEvent<ProjectCreatedForWriter>,
+        IApplyEvent<ProjectUpdatedForWriter>,
+        IApplyEvent<ProjectDeletedForWriter>
     {
         private const int MaxBioLength = 160;
 
@@ -79,7 +79,7 @@ namespace WordProgress.Domain.Aggregates
             };
         }
 
-        public IEnumerable Handle(CreateProject c)
+        public IEnumerable Handle(CreateProjectForWriter c)
         {
             if (!UserExists())
             {
@@ -91,9 +91,10 @@ namespace WordProgress.Domain.Aggregates
                 throw new ProjectNameAlreadyUsedByThisWriter();
             }
 
-            yield return new ProjectCreated
+            yield return new ProjectCreatedForWriter
             {
                 Id = c.Id,
+                ProjectId = c.ProjectId,
                 Name = c.Name,
                 StartDate = c.StartDate,
                 TargetCompletionDate = c.TargetCompletionDate,
@@ -101,7 +102,7 @@ namespace WordProgress.Domain.Aggregates
             };
         }
 
-        public IEnumerable Handle(UpdateProject c)
+        public IEnumerable Handle(UpdateProjectForWriter c)
         {
             if (!UserExists())
             {
@@ -118,7 +119,7 @@ namespace WordProgress.Domain.Aggregates
                 throw new ProjectNameAlreadyUsedByThisWriter();
             }
 
-            yield return new ProjectUpdated()
+            yield return new ProjectUpdatedForWriter()
             {
                 Id = c.Id,
                 ProjectId = c.ProjectId,
@@ -129,9 +130,23 @@ namespace WordProgress.Domain.Aggregates
             };
         }
 
-        public IEnumerable Handle(DeleteProject c)
+        public IEnumerable Handle(DeleteProjectForWriter c)
         {
-            throw new NotImplementedException();
+            if (!UserExists())
+            {
+                throw new WriterNotRegistered();
+            }
+
+            if (!ProjectExists(c.ProjectId))
+            {
+                throw new ProjectDoesntExistForThisWriter();
+            }
+
+            yield return new ProjectDeletedForWriter
+            {
+                Id = c.Id,
+                ProjectId = c.ProjectId
+            };
         }
         #endregion
 
@@ -153,30 +168,41 @@ namespace WordProgress.Domain.Aggregates
             _bio = e.Bio;
         }
 
-        public void Apply(ProjectCreated e)
+        public void Apply(ProjectCreatedForWriter e)
         {
             var project = new Project();
 
-            project.Handle(new CreateProject
+            project.ApplyEvents(project.Handle(new CreateProject
             {
                 Id = Guid.NewGuid(),
+                ProjectId = e.ProjectId,
                 Name = e.Name,
                 StartDate = e.StartDate,
                 TargetCompletionDate = e.TargetCompletionDate,
                 TargetWordCount = e.TargetWordCount
-            });
-            
+            }));
+
             _projects.Add(project);
         }
 
-        public void Apply(ProjectUpdated e)
+        public void Apply(ProjectUpdatedForWriter e)
         {
-            //var project = _projects.
+            var project = _projects.Single(x => x.Id == e.ProjectId);
+
+            project.ApplyEvents(project.Handle(new UpdateProject
+            {
+                Id = Guid.NewGuid(),
+                ProjectId = e.ProjectId,
+                Name = e.Name,
+                StartDate = e.StartDate,
+                TargetCompletionDate = e.TargetCompletionDate,
+                TargetWordCount = e.TargetWordCount
+            }));
         }
 
-        public void Apply(ProjectDeleted e)
+        public void Apply(ProjectDeletedForWriter e)
         {
-            throw new NotImplementedException();
+            _projects.RemoveAll(x => x.Id == e.ProjectId);
         }
         #endregion
     }
