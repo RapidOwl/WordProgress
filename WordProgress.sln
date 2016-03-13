@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordProgress.Domain", "WordProgress.Domain\WordProgress.Domain.csproj", "{FD5C16FA-733A-4183-B5C1-9ED6E92AB857}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordProgress.Tests", "WordProgress.Tests\WordProgress.Tests.csproj", "{869098DE-F303-44F8-B6C9-B36D9BE71869}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordProgress.ReadModels", "WordProgress.ReadModels\WordProgress.ReadModels.csproj", "{A80FEFA9-14B6-44EF-81CE-A5A9F875D80F}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "WordProgress.Web", "WordProgress.Web\WordProgress.Web.xproj", "{9A8841C8-A343-4C06-8B28-16CE30A59431}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{A80FEFA9-14B6-44EF-81CE-A5A9F875D80F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A80FEFA9-14B6-44EF-81CE-A5A9F875D80F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A80FEFA9-14B6-44EF-81CE-A5A9F875D80F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A8841C8-A343-4C06-8B28-16CE30A59431}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A8841C8-A343-4C06-8B28-16CE30A59431}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A8841C8-A343-4C06-8B28-16CE30A59431}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A8841C8-A343-4C06-8B28-16CE30A59431}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

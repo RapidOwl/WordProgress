@@ -67,10 +67,9 @@
     <Compile Include="Exceptions\Exceptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\WordProgress.Edument\WordProgress.Edument.csproj">
-      <Project>{3C6782DE-A15C-4510-821B-A7C3E363880E}</Project>
+      <Project>{3c6782de-a15c-4510-821b-a7c3e363880e}</Project>
       <Name>WordProgress.Edument</Name>
     </ProjectReference>
   </ItemGroup>

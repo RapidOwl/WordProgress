@@ -1,0 +1,16 @@
+{
+  "version": "1.0.0-*",
+  "frameworks": {
+    "net452": {
+      "wrappedProject": "../../WordProgress.ReadModels/WordProgress.ReadModels.csproj",
+      "bin": {
+        "assembly": "../../WordProgress.ReadModels/obj/{configuration}/WordProgress.ReadModels.dll",
+        "pdb": "../../WordProgress.ReadModels/obj/{configuration}/WordProgress.ReadModels.pdb"
+      },
+      "dependencies": {
+        "WordProgress.Domain": "1.0.0-*",
+        "WordProgress.Edument": "1.0.0-*"
+      }
+    }
+  }
+}

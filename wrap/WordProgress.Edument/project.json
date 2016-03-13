@@ -1,0 +1,15 @@
+{
+  "version": "1.0.0-*",
+  "frameworks": {
+    "net452": {
+      "wrappedProject": "../../WordProgress.Edument/WordProgress.Edument.csproj",
+      "bin": {
+        "assembly": "../../WordProgress.Edument/obj/{configuration}/WordProgress.Edument.dll",
+        "pdb": "../../WordProgress.Edument/obj/{configuration}/WordProgress.Edument.pdb"
+      },
+      "dependencies": {
+        "NUnit": "2.6.4"
+      }
+    }
+  }
+}

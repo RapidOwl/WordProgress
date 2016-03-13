@@ -1,0 +1,15 @@
+{
+  "version": "1.0.0-*",
+  "frameworks": {
+    "net452": {
+      "wrappedProject": "../../WordProgress.Domain/WordProgress.Domain.csproj",
+      "bin": {
+        "assembly": "../../WordProgress.Domain/obj/{configuration}/WordProgress.Domain.dll",
+        "pdb": "../../WordProgress.Domain/obj/{configuration}/WordProgress.Domain.pdb"
+      },
+      "dependencies": {
+        "WordProgress.Edument": "1.0.0-*"
+      }
+    }
+  }
+}
