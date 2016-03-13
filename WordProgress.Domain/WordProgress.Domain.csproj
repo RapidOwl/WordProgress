@@ -42,11 +42,9 @@
   <ItemGroup>
     <Compile Include="Aggregates\Aggregate.cs" />
     <Compile Include="Aggregates\Project.cs" />
-    <Compile Include="Aggregates\ProjectProgress.cs" />
     <Compile Include="Aggregates\WordCountUpdate.cs" />
     <Compile Include="Aggregates\Writer.cs" />
     <Compile Include="Commands\BaseCommand.cs" />
-    <Compile Include="Commands\CalculateProjectProgress.cs" />
     <Compile Include="Commands\CreateProjectForWriter.cs" />
     <Compile Include="Commands\CreateProject.cs" />
     <Compile Include="Commands\DeleteProjectForWriter.cs" />
@@ -56,12 +54,9 @@
     <Compile Include="Commands\UpdateProject.cs" />
     <Compile Include="Commands\UpdateWordCount.cs" />
     <Compile Include="Commands\UpdateWriter.cs" />
-    <Compile Include="DTOs\BaseDto.cs" />
-    <Compile Include="DTOs\ProjectDto.cs" />
     <Compile Include="Events\ProjectCreatedForWriter.cs" />
     <Compile Include="Events\ProjectCreated.cs" />
     <Compile Include="Events\ProjectDeletedForWriter.cs" />
-    <Compile Include="Events\ProjectProgressCalculated.cs" />
     <Compile Include="Events\ProjectUpdatedForWriter.cs" />
     <Compile Include="Events\ProjectUpdated.cs" />
     <Compile Include="Events\WriterRegistered.cs" />

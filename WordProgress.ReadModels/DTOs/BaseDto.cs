@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WordProgress.Domain.DTOs
+namespace WordProgress.ReadModels.DTOs
 {
     public class BaseDto
     {
