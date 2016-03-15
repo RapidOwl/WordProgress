@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Glimpse;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Http;
@@ -41,6 +42,8 @@ namespace WordProgress.Web
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddGlimpse();
+
             services.AddMvc();
 
             services.AddTransient<IWriterReader, WriterReader>();
@@ -54,6 +57,7 @@ namespace WordProgress.Web
 
             if (env.IsDevelopment())
             {
+                app.UseGlimpse();
                 app.UseBrowserLink();
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
