@@ -1,8 +1,14 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
+
+@model WordProgress.Web.ViewModels.Home.HomeIndexModel
 @{
     ViewBag.Title = "Home!";
 }
 
 <h1>DUGONGS!</h1>
+
+<label asp-for="WriterUserName"></label>
+
+<p>@Model.WriterUserName</p>

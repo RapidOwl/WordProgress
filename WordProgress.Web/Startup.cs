@@ -31,6 +31,8 @@ namespace WordProgress.Web
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
+
+            WPDomain.Setup();
         }
 
         public IConfigurationRoot Configuration { get; set; }

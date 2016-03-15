@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 using NUnit.Framework;
-using WordProgress.Domain.Aggregates;
 using WordProgress.Edument;
 
 namespace WordProgress.Tests

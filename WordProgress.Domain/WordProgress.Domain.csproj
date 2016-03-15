@@ -40,7 +40,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Aggregates\Aggregate.cs" />
     <Compile Include="Aggregates\Project.cs" />
     <Compile Include="Aggregates\WordCountUpdate.cs" />
     <Compile Include="Aggregates\Writer.cs" />
