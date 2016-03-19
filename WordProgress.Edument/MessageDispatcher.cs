@@ -12,7 +12,7 @@ namespace WordProgress.Edument
     /// node application that can safely build its subscriber list at startup and keep
     /// it in memory. Depends on some kind of event storage mechanism.
     /// </summary>
-    public class MessageDispatcher
+    public class MessageDispatcher : IMessageDispatcher
     {
         private Dictionary<Type, Action<object>> commandHandlers =
             new Dictionary<Type, Action<object>>();

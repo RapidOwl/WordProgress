@@ -16,13 +16,15 @@ namespace WordProgress.ReadModels
         // This and any other objects stored in memory won't technically know about each other.
         // So, any events coming in need to know the IDs of the objects they're referring to.
         // e.g. "Add Project" events need to have the writer's ID as well.
-        private WriterDto _writer = new WriterDto();
+        private readonly WriterDto _writer = new WriterDto();
 
         public void Handle(WriterRegistered e)
         {
             // This would write the changes to the read store.
+
             _writer.Id = e.Id;
             _writer.UserName = e.UserName;
+
             _writer.Name = e.Name;
         }
 

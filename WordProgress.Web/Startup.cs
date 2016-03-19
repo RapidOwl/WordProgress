@@ -9,7 +9,9 @@ using Microsoft.AspNet.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using WordProgress.Domain.Aggregates;
 using WordProgress.ReadModels;
+using WordProgress.Web.Middleware;
 
 namespace WordProgress.Web
 {
@@ -32,8 +34,6 @@ namespace WordProgress.Web
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
-
-            WPDomain.Setup();
         }
 
         public IConfigurationRoot Configuration { get; set; }
@@ -44,9 +44,11 @@ namespace WordProgress.Web
         {
             services.AddGlimpse();
 
-            services.AddMvc();
+            services.AddEdumentDispatcher();
 
-            services.AddTransient<IWriterReader, WriterReader>();
+            services.AddScoped<IWriterReader, WriterReader>();
+
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -86,6 +88,13 @@ namespace WordProgress.Web
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+            });
+
+            app.UseEdumentDispatcher(new List<Type>
+            {
+                // TODO Split WriterReader into WriterReader and WriterWriter. Only WriterWriter would be registered here.
+                typeof(WriterReader),
+                typeof(Writer)
             });
         }
 

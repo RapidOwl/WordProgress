@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 using Microsoft.AspNet.Mvc;
 using WordProgress.Domain.Commands;
 using WordProgress.ReadModels;
@@ -11,10 +10,12 @@ namespace WordProgress.Web.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IEdumentDispatcher _edumentDispatcher;
         private readonly IWriterReader _writerReader;
 
-        public HomeController(IWriterReader writerReader)
+        public HomeController(IEdumentDispatcher edumentDispatcher, IWriterReader writerReader)
         {
+            _edumentDispatcher = edumentDispatcher;
             _writerReader = writerReader;
         }
 
@@ -32,7 +33,7 @@ namespace WordProgress.Web.Controllers
         //[HttpPost]
         public IActionResult SetUserName()
         {
-            WPDomain.Dispatcher.SendCommand(new RegisterWriter
+            _edumentDispatcher.Dispatcher.SendCommand(new RegisterWriter
             {
                 Id = Guid.NewGuid(),
                 UserName = "New Dugong!",
