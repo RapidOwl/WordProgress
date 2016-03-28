@@ -30,6 +30,15 @@ namespace WordProgress.Edument
             eventStore = es;
         }
 
+        public void Setup(IEnumerable<Type> typesToScan)
+        {
+            // TODO Make this scan the whole of the assembly instead of taking the type parameters?
+            foreach (var type in typesToScan)
+            {
+                ScanInstance(Activator.CreateInstance(type));
+            }
+        }
+
         /// <summary>
         /// Tries to send the specified command to its handler. Throws an exception
         /// if there is no handler registered for the command.

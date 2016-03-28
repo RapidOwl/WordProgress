@@ -1,9 +1,13 @@
+using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace WordProgress.Edument
 {
     public interface IMessageDispatcher
     {
+        void Setup(IEnumerable<Type> typesToScan);
+
         /// <summary>
         /// Tries to send the specified command to its handler. Throws an exception
         /// if there is no handler registered for the command.

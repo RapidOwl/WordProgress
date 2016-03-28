@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.AspNet.Mvc;
 using WordProgress.Domain.Commands;
+using WordProgress.Edument;
 using WordProgress.ReadModels;
 using WordProgress.Web.ViewModels.Home;
 
@@ -10,12 +11,12 @@ namespace WordProgress.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IEdumentDispatcher _edumentDispatcher;
+        private readonly IMessageDispatcher _messageDispatcher;
         private readonly IWriterReader _writerReader;
 
-        public HomeController(IEdumentDispatcher edumentDispatcher, IWriterReader writerReader)
+        public HomeController(IMessageDispatcher messageDispatcher, IWriterReader writerReader)
         {
-            _edumentDispatcher = edumentDispatcher;
+            _messageDispatcher = messageDispatcher;
             _writerReader = writerReader;
         }
 
@@ -33,7 +34,7 @@ namespace WordProgress.Web.Controllers
         //[HttpPost]
         public IActionResult SetUserName()
         {
-            _edumentDispatcher.Dispatcher.SendCommand(new RegisterWriter
+            _messageDispatcher.SendCommand(new RegisterWriter
             {
                 Id = Guid.NewGuid(),
                 UserName = "New Dugong!",

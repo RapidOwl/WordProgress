@@ -14,7 +14,6 @@ namespace WordProgress.Web.Middleware
         {
             services.AddSingleton<IEventStore, InMemoryEventStore>();
             services.AddSingleton<IMessageDispatcher, MessageDispatcher>();
-            services.AddSingleton<IEdumentDispatcher, EdumentDispatcher>();
 
             return services;
         }
@@ -29,9 +28,9 @@ namespace WordProgress.Web.Middleware
     {
         private readonly RequestDelegate _next;
 
-        public EdumentDispatcherMiddleware(RequestDelegate next, IEdumentDispatcher edumentDispatcher, IEnumerable<Type> typesToScan)
+        public EdumentDispatcherMiddleware(RequestDelegate next, IMessageDispatcher messageDispatcher, IEnumerable<Type> typesToScan)
         {
-            edumentDispatcher.Setup(typesToScan);
+            messageDispatcher.Setup(typesToScan);
 
             _next = next;
         }

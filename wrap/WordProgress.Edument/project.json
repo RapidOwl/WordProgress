@@ -8,7 +8,8 @@
         "pdb": "../../WordProgress.Edument/obj/{configuration}/WordProgress.Edument.pdb"
       },
       "dependencies": {
-        "NUnit": "2.6.4"
+        "NUnit": "2.6.4",
+        "Newtonsoft.Json": "8.0.3"
       }
     }
   }
