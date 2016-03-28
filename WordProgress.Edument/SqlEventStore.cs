@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Text;
 using System.Xml.Serialization;
+using Newtonsoft.Json;
 
 namespace WordProgress.Edument
 {
@@ -40,19 +41,11 @@ namespace WordProgress.Edument
                     {
                         while (r.Read())
                         {
-                            yield return DeserializeEvent(r.GetString(0), r.GetString(1));
+                            yield return JsonConvert.DeserializeObject(r.GetString(1), Type.GetType(r.GetString(0)));
                         }
                     }
                 }
             }
-        }
-
-        private object DeserializeEvent(string typeName, string data)
-        {
-            var ser = new XmlSerializer(Type.GetType(typeName));
-            var ms = new MemoryStream(Encoding.UTF8.GetBytes(data));
-            ms.Seek(0, SeekOrigin.Begin);
-            return ser.Deserialize(ms);
         }
 
         public void SaveEventsFor<TAggregate>(Guid aggregateId, int eventsLoaded, ArrayList newEvents)
@@ -78,7 +71,7 @@ namespace WordProgress.Edument
                           VALUES(@AggregateId, {0}, @Type{1}, @Body{1}, @CommitDateTime);",
                         eventsLoaded + i, i);
                     cmd.Parameters.AddWithValue("Type" + i.ToString(), e.GetType().AssemblyQualifiedName);
-                    cmd.Parameters.AddWithValue("Body" + i.ToString(), SerializeEvent(e));
+                    cmd.Parameters.AddWithValue("Body" + i.ToString(), JsonConvert.SerializeObject(e));
                 }
 
                 // Add commit.
@@ -94,15 +87,6 @@ namespace WordProgress.Edument
                     cmd.ExecuteNonQuery();
                 }
             }
-        }
-
-        private string SerializeEvent(object obj)
-        {
-            var ser = new XmlSerializer(obj.GetType());
-            var ms = new MemoryStream();
-            ser.Serialize(ms, obj);
-            ms.Seek(0, SeekOrigin.Begin);
-            return new StreamReader(ms).ReadToEnd();
         }
     }
 }
